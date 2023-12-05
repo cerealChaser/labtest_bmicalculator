@@ -30,7 +30,9 @@ class User{
     if(await SQLiteDB().insert(SQLiteTable, toJson())!=0){
       return true;
     }
-    else return false;
+    else {
+      return false;
+    }
   }
 
   static Future<List<User>> loadAll() async{
@@ -40,7 +42,6 @@ class User{
     for (var item in result){
       users.add(User.fromJson(item));
     }
-    print (users);
     return users;
   }
 }

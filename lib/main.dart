@@ -5,7 +5,6 @@
 
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:labtest_bmicalculator/user.dart';
 
@@ -30,11 +29,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<User> users = [];
-   TextEditingController _nameFieldController = TextEditingController();
-   TextEditingController _heightFieldController = TextEditingController();
-   TextEditingController _weightFieldController= TextEditingController();
-   TextEditingController _bmiFieldController = TextEditingController();
-   TextEditingController _bmiStatusController = TextEditingController();
+   final TextEditingController _nameFieldController = TextEditingController();
+   final TextEditingController _heightFieldController = TextEditingController();
+   final TextEditingController _weightFieldController= TextEditingController();
+   final TextEditingController _bmiFieldController = TextEditingController();
+   final TextEditingController _bmiStatusController = TextEditingController();
+   final TextEditingController _genderFieldController = TextEditingController();
   double _bmiValue=0;
   String _gender="";
   String _bmiStatus="";
@@ -47,48 +47,37 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (_gender == "male"){
       if (_bmiValue < 18.5){
-        print ("Underweight");
         _bmiStatus = "Underweight";
       }
       if (_bmiValue >= 18.5 && _bmiValue <= 24.9){
-        print ("Ideal");
         _bmiStatus = "Ideal";
       }
       if (_bmiValue >= 25.0 && _bmiValue <= 29.9){
-        print ("Overweight");
         _bmiStatus = "Overweight";
       }
       if (_bmiValue > 30.0){
-        print ("Obese");
         _bmiStatus = "Overweight";
       }
     }
 
     else if (_gender == "female"){
       if (_bmiValue < 16){
-        print ("Underweight");
         _bmiStatus = "Underweight";
       }
       if (_bmiValue >= 16 && _bmiValue <= 22){
-        print ("Ideal");
         _bmiStatus = "Ideal";
       }
       if (_bmiValue >= 22 && _bmiValue <= 27){
-        print ("Overweight");
         _bmiStatus = "Overweight";
       }
       if (_bmiValue > 27){
-        print ("Obese");
         _bmiStatus = "Overweight";
       }
     }
 
-    print ('Text Field 1: $name');
-    print ('Text Field 2: $height');
-    print ('Text Field 3: $weight');
-    print ('BMI VALUE: $_bmiValue' );
-
     _bmiStatusController.text = _bmiStatus;
+    _genderFieldController.text = _gender;
+    _bmiFieldController.text = _bmiValue.toString();
 
     User user = User(name,weight, height, _gender, _bmiStatus);
     if (await user.save()){
@@ -107,7 +96,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _nameFieldController.text = result[lastIndex].name;
       _heightFieldController.text = result[lastIndex].height.toString();
       _weightFieldController.text = result[lastIndex].weight.toString();
+      _genderFieldController.text = result[lastIndex].gender.toString();
       _bmiStatusController.text = result[lastIndex].bmi_status;
+      _bmiFieldController.text = (result[lastIndex].weight/
+          pow(result[lastIndex].height/100, 2)).toString();
     });
   }
 
@@ -165,10 +157,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('Calculate BMI and Save')
             ),
             Center(
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    _bmiStatus,
+                    _genderFieldController.text,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    "  "// This is to space between the variables
+                  ),
+                  Text(
+                    _bmiStatusController.text,
                     style: TextStyle(fontSize: 16),
                   )
                 ],

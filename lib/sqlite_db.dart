@@ -42,7 +42,6 @@ static List<String> tableSQLStrings = [
 
 Future <int> insert (String tableName, Map<String, dynamic> row) async{
   Database db = await _instance.database;
-  print ("LOCAL DB INSERT SUCCESS");
   return await db.insert(tableName, row);
 }
 
@@ -52,20 +51,13 @@ Future<List<Map<String, dynamic>>> queryAll(String tableName) async{
 }
 
 Future<int> update (String tableName, String idColumn, Map<String, dynamic> row) async{
-  print ("\n SQLite Update Success");
   Database db = await _instance.database;
   dynamic id = row [idColumn];
-  print ("\n ROW INFO:");
-  row.forEach((key, value) {
-    print ('$key: $value');
-  });
-  print ("\n SQLITE ID IS :" +id.toString());
   return await db.update(tableName, row, where: '$idColumn = ?', whereArgs: [id]);
 }
 
 Future<int> delete (String tableName, String idColumn, dynamic idValue) async{
   Database db = await _instance.database;
-  print ("\n SQLITE delete sucess!");
   return await db.delete(tableName, where:'$idColumn = ?', whereArgs: [idValue]);
 }
 }
